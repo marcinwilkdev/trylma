@@ -2,9 +2,69 @@ package org.example;
 
 public class Gracz {
     private Pionek[] pionki;
-//    private boolean[] polaWygrywajace;
+    private int id;
 
-    public Gracz() {
+    public Gracz(int id) {
+        this.id = id;
+        stworzPionki();
+    }
+
+    private void stworzPionki(){
+        pionki = new Pionek[10];
+        int i = 0;
+        if(id % 2 == 0){
+            for (int x=0; x<25; x++) {
+                for (int y=0; y<17; y++) {
+                    if ((y >= -1*x + 12) && (y <= 12) && (y >= x - 12) && (x+y) % 2 == 0) {
+                        if(id == 0 && y < 4){
+                            pionki[i] = new Pionek(x,y);
+                            i++;
+                        } else if(id == 2 && y > -1*x + 28){
+                            pionki[i] = new Pionek(x,y);
+                            i++;
+                        } else if(id == 4 && y > x + 4){
+                            pionki[i] = new Pionek(x,y);
+                            i++;
+                        }
+                    }
+                }
+            }
+        } else {
+            for (int x=0; x<25; x++) {
+                for (int y=0; y<17; y++) {
+                    if ((y <= x + 4) && (y >= 4) && (y <= -1*x + 28) && (x+y) % 2 == 0) {
+                        if(id == 1 && y < x - 12){
+                            pionki[i] = new Pionek(x,y);
+                            i++;
+                        } else if(id == 3 && y > 12){
+                            pionki[i] = new Pionek(x,y);
+                            i++;
+                        } else if(id == 5 && y < -1*x + 12){
+                            pionki[i] = new Pionek(x,y);
+                            i++;
+                        }
+                    }
+                }
+            }
+        }
 
     }
+
+    public int getid(){
+        return id;
+    }
+
+    public int liczPionki(){
+        int i = 0;
+        int acc = 0;
+        while(i<10){
+            if(pionki[i] != null){
+                acc++;
+            }
+            i++;
+        }
+        return acc;
+    }
+
+
 }
