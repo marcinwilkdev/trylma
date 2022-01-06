@@ -45,5 +45,14 @@ public class PionekTest {
         assertEquals(gracze[5].getid(),5);
     }
 
+    @Test
+    public void ruszPionkaTest(){
+        Pionek pionek = new Pionek(0,0);
+        Koordynaty koordynaty = new Koordynaty(3,4);
+        pionek.ruszPionka(koordynaty);
+        assertEquals(3,pionek.getX());
+        assertEquals(4,pionek.getY());
+    }
+
 
 }
