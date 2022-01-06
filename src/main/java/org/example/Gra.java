@@ -6,7 +6,7 @@ public class Gra {
 
     public Gra(int liczbaGraczy) {
         stworzPola();
-//        this.gracze = stworzGraczy(liczbaGraczy);
+        stworzGraczy(liczbaGraczy);
     }
 
     private void stworzPola() {
@@ -45,7 +45,39 @@ public class Gra {
         }
     }
 
+    private void stworzGraczy(int liczbaGraczy){
+        int i = 0;
+
+
+        if(liczbaGraczy == 2 || liczbaGraczy == 3 || liczbaGraczy == 4 || liczbaGraczy == 6){
+            gracze = new Gracz[liczbaGraczy];
+            int idGracza = 0;
+            while(i<liczbaGraczy){
+                gracze[i] = new Gracz(idGracza);
+                int k = 6/liczbaGraczy;
+                if(liczbaGraczy == 4){
+                    if(i == 1){
+                        idGracza = idGracza + 2;
+                    } else{
+                        idGracza = idGracza + 1;
+                    }
+                } else{
+                    idGracza = idGracza + k;
+                }
+                i++;
+            }
+        }
+    }
+
+    private void rozmiescGraczy(){
+
+    }
+
     public boolean[][] getPola() {
         return pola;
+    }
+
+    public Gracz[] getGracze(){
+        return gracze;
     }
 }
