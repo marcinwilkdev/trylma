@@ -50,6 +50,34 @@ public class Gracz {
 
     }
 
+    public void wykonajRuch(Ruch ruch) {
+        Pionek pionek = this.wybierzPionek(ruch.getzPola());
+
+        // pionek nie moze byc nullem bo weryfikacja wczesniej w Gra
+
+        pionek.ruszPionka(ruch.getDoPola());
+    }
+
+    public boolean czyPionekNaPolu(Koordynaty koordynaty) {
+        for(int i=0; i<10; i++) {
+            if(pionki[i].getX() == koordynaty.getX() && pionki[i].getY() == koordynaty.getY()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public Pionek wybierzPionek(Koordynaty koordynaty) {
+        for(Pionek pionek : this.pionki) {
+            if (pionek.getX() == koordynaty.getX() && pionek.getY() == koordynaty.getY()) {
+                return pionek;
+            }
+        }
+
+        return null;
+    }
+
     public int getid(){
         return id;
     }
