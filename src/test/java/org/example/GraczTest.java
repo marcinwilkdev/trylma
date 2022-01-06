@@ -2,10 +2,9 @@ package org.example;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
-public class GraczTest {
+public class LiczbaPionkowTest {
 
     @Test
     public void liczbaPionkowTest0(){
@@ -43,27 +42,6 @@ public class GraczTest {
         assertEquals(gracz.liczPionki(), 10);
     }
 
-    @Test
-    public void wykonajRuch(){
-        Gra gra = new Gra(6);
 
-        Pionek pionek = null;
-        int i = 0;
-        while(i<10){
-            if(gra.getAktualnyGracz().getPionki()[i].getX()==13 && gra.getAktualnyGracz().getPionki()[i].getY()==3){
-                pionek = gra.getAktualnyGracz().getPionki()[i];
-            }
-            i++;
-        }
-        assertNotNull(pionek);
-
-        Koordynaty poczatek = new Koordynaty(13,3);
-        Koordynaty koniec = new Koordynaty(14,4);
-        Ruch ruch = new Ruch(poczatek,koniec);
-        gra.getAktualnyGracz().wykonajRuch(ruch);
-
-        assertEquals(koniec.getX(), pionek.getX());
-        assertEquals(koniec.getY(), pionek.getY());
-    }
 
 }
