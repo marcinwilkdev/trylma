@@ -19,5 +19,7 @@ public class PanelGry extends JPanel{
         this.setBackground(Color.decode("#c2c3c4"));
     }
 
-
+    public void wygrana() {
+        this.panelTekstu.setText("WYGRALES");
+    }
 }

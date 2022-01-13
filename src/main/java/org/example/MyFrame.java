@@ -15,12 +15,21 @@ public class MyFrame extends JFrame{
     int liczbaGraczy;
     int id;
     Plansza plansza;
+    PanelGry panelGry;
 
     MyFrame(int id, int liczbaGraczy) {
         this.id = id;
         this.liczbaGraczy = liczbaGraczy;
         ustawRamke();
         stworzKomponenty();
+    }
+
+    public void przestawPionkaNaPlanszy(int x1, int y1, int x2, int y2) {
+        plansza.przestawPionkaNaPlanszy(x1, y1, x2, y2);
+    }
+
+    public void wygrana() {
+        panelGry.wygrana();
     }
 
     public void ustawRamke(){
@@ -32,6 +41,7 @@ public class MyFrame extends JFrame{
 
     public void stworzKomponenty(){
         PanelGry panelGry = new PanelGry(id);
+        this.panelGry = panelGry;
         this.add(panelGry);
         dodajNumeryGraczy(liczbaGraczy);
         plansza = new Plansza(liczbaGraczy);

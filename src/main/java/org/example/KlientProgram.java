@@ -20,6 +20,10 @@ public class KlientProgram {
             globalReader = reader;
             globalWriter = writer;
 
+            boolean graRozpoczeta = false;
+            int idGracza = -1;
+            MyFrame myFrame = null;
+
             while(true) {
                 String message = reader.readLine();
                 System.out.println(message);
@@ -27,7 +31,20 @@ public class KlientProgram {
                 String[] messageTokens = message.split(" ");
 
                 if(messageTokens[0].equals("ID")){
-                    MyFrame frame = new MyFrame(Integer.parseInt(messageTokens[1]),Integer.parseInt(messageTokens[2]));
+                    idGracza = Integer.parseInt(messageTokens[1]);
+                    myFrame = new MyFrame(idGracza,Integer.parseInt(messageTokens[2]));
+                    graRozpoczeta = true;
+                }
+
+                if(messageTokens[0].equals("RUCH")) {
+                    int x1 = Integer.parseInt(messageTokens[2]);
+                    int y1 = Integer.parseInt(messageTokens[3]);
+                    int x2 = Integer.parseInt(messageTokens[4]);
+                    int y2 = Integer.parseInt(messageTokens[5]);
+
+                    if(myFrame != null) {
+                        myFrame.przestawPionkaNaPlanszy(x1, y1, x2, y2);
+                    }
                 }
 
                 if(messageTokens[0].equals("RUCH") || messageTokens[0].equals("ID") || messageTokens[0].equals("SKIP")) {
@@ -35,11 +52,17 @@ public class KlientProgram {
                 }
 
                 if(messageTokens[0].equals("WYGRANA")) {
-                    break;
+                    if(Integer.parseInt(messageTokens[1]) == idGracza) {
+                        if(myFrame != null) {
+                            myFrame.wygrana();
+                        }
+                    }
                 }
 
-                String response = inputScanner.nextLine();
-                writer.println(response);
+                if(!graRozpoczeta) {
+                    String response = inputScanner.nextLine();
+                    writer.println(response);
+                }
             }
         }
     }

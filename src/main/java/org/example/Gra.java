@@ -21,18 +21,22 @@ public class Gra {
 
     public void glownaPetla(Serwer serwer) {
         while(true) {
+            Gracz aktualnyGracz = this.getAktualnyGracz();
+
             Ruch ruch = this.pobierzRuch(serwer);
 
             App.logger.log(String.format("Gracz %d wykonał ruch %s.", this.aktualnyGracz, ruch));
 
             serwer.rozeslijRuch(this.aktualnyGracz, ruch);
 
-            this.getAktualnyGracz().wykonajRuch(ruch);
+            aktualnyGracz.wykonajRuch(ruch);
 
-            if(this.getAktualnyGracz().sprawdzWygrana()) {
-                App.logger.log(String.format("Gracz %d wygrał. Koniec gry.", this.aktualnyGracz));
+            if(aktualnyGracz.sprawdzWygrana()) {
+                App.logger.log(String.format("Gracz %d wygrał.", this.aktualnyGracz));
 
                 serwer.rozeslijWygrana(this.aktualnyGracz);
+                this.gracze[this.aktualnyGracz] = null;
+
                 break;
             }
 
@@ -60,6 +64,10 @@ public class Gra {
     }
 
     public Gracz getAktualnyGracz() {
+        while(this.gracze[this.aktualnyGracz] == null) {
+            kolejnaTura();
+        }
+
         return this.gracze[this.aktualnyGracz];
     }
 

@@ -218,21 +218,25 @@ public class Plansza extends JPanel implements MouseListener{
         if(clicker == 0){
             if(PionekNaPolu((e.getX()-135)/25, (e.getY()-90)/37)!=null){
                 holderPionka = PionekNaPolu((e.getX()-135)/25, (e.getY()-90)/37);
+                System.out.println("Pole klikniete.");
                 clicker++;
             }
         }
         else if(clicker == 1){
-            if(getPole((e.getX()-135)/25, (e.getY()-90)/37)!=null){
+            Pole pole = getPole((e.getX()-135)/25, (e.getY()-90)/37);
+            if(pole != null && (pole.getx() != holderPionka.getx() || pole.gety() != holderPionka.gety())){
                 holderPola = getPole((e.getX()-135)/25, (e.getY()-90)/37);
                 KlientProgram.globalWriter.println(String.format("RUCH %d %d %d %d", holderPionka.getx(), holderPionka.gety(), holderPola.getx(), holderPola.gety()));
-                if(true){
-                    holderPionka.x = holderPola.x;
-                    holderPionka.y = holderPola.y;
-                    holderPionka.aktualizujWspolrzedne();
-                }
+                clicker = 0;
             }
-            clicker = 0;
         }
+    }
+
+    public void przestawPionkaNaPlanszy(int x1, int y1, int x2, int y2) {
+        holderPionka = PionekNaPolu(x1, y1);
+        holderPionka.x = x2;
+        holderPionka.y = y2;
+        holderPionka.aktualizujWspolrzedne();
     }
 
     @Override

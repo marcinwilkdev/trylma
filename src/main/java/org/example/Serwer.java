@@ -4,10 +4,11 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Serwer {
     private final int port;
-    private final ArrayList<Klient> klienci;
+    private final List<Klient> klienci;
 
     public Serwer(int port) {
         this.port = port;
@@ -107,19 +108,32 @@ public class Serwer {
         String message = String.format("WYGRANA %d", nrGracza);
 
         this.rozeslijDoWszystkich(message);
-        this.rozlaczGraczy();
+        this.rozlaczGracza(nrGracza);
     }
 
     private void rozeslijDoWszystkich(String message) {
         for(Klient klient : this.klienci) {
-            klient.writeMessage(message);
+            if(klient != null) {
+                klient.writeMessage(message);
+            }
+        }
+    }
+
+    public void rozlaczGracza(int idGracza) {
+        try {
+            this.klienci.get(idGracza).close();
+            this.klienci.set(idGracza, null);
+        } catch (IOException e) {
+            App.logger.log("Nie udało się zamknąć klienta.");
         }
     }
 
     public void rozlaczGraczy() {
         for(Klient klient : this.klienci) {
             try {
-                klient.close();
+                if(klient != null) {
+                    klient.close();
+                }
             } catch (IOException e) {
                 App.logger.log("Nie udało się zamknąć klienta.");
             }
