@@ -91,7 +91,7 @@ public class Serwer {
         for(int i=0; i<liczbaKlientow; i++) {
             Klient klient = this.klienci.get(i);
 
-            String message = String.format("ID %d", i);
+            String message = String.format("ID %d %d", i, liczbaKlientow);
 
             klient.writeMessage(message);
         }

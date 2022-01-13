@@ -6,6 +6,7 @@ public class App
 
     public static void main( String[] args )
     {
+
         while(true) {
             Serwer serwer = new Serwer(8189);
 
