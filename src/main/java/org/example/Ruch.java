@@ -11,6 +11,11 @@ public class Ruch {
         this.skip = false;
     }
 
+    public Ruch(Koordynaty zPola, Koordynaty doPola) {
+        this.zPola = zPola;
+        this.doPola = doPola;
+    }
+
     public Ruch() {
         this.zPola = null;
         this.doPola = null;

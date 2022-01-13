@@ -18,4 +18,5 @@ public class Pionek {
     public int getY() {
         return this.koordynaty.getY();
     }
+
 }

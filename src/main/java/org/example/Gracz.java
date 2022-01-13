@@ -139,6 +139,10 @@ public class Gracz {
         return acc;
     }
 
+    public Pionek[] getPionki(){
+        return pionki;
+    }
+
     public boolean sprawdzWygrana() {
         for(Pionek pionek : pionki) {
             boolean naPoluWygrywajacym = false;

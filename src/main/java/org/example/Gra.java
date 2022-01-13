@@ -3,7 +3,6 @@ package org.example;
 public class Gra {
     public static final int SZEROKOSC_PLANSZY = 25;
     public static final int WYSOKOSC_PLANSZY = 17;
-
     public static final int LICZBA_PIONKOW = 10;
 
     private boolean[][] pola;
@@ -67,6 +66,10 @@ public class Gra {
     public boolean zweryfikujRuch(Ruch ruch) {
         Gracz gracz = this.getAktualnyGracz();
 
+        if(!this.pola[ruch.getDoPola().getX()][ruch.getDoPola().getY()]){
+            return false;
+        }
+
         if(!gracz.czyPionekNaPolu(ruch.getzPola())) {
             return false;
         }
@@ -86,7 +89,7 @@ public class Gra {
         return false;
     }
 
-    private boolean czyPionekNaPolu(Koordynaty koordynaty) {
+    public boolean czyPionekNaPolu(Koordynaty koordynaty) {
         for(int i=0; i<liczbaGraczy; i++) {
             Gracz gracz = this.gracze[i];
 
@@ -168,4 +171,8 @@ public class Gra {
     public Gracz[] getGracze(){
         return gracze;
     }
+
+    public int getRunda(){ return runda; }
+
+    public int getAktGracz(){ return aktualnyGracz; }
 }
