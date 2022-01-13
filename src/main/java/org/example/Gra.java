@@ -20,24 +20,35 @@ public class Gra {
         this.runda = 0;
     }
 
-    public void glownaPetla() {
+    public void glownaPetla(Serwer serwer) {
         while(true) {
-            int aktualnyGraczId = this.getAktualnyGracz().getid();
+            Ruch ruch = this.pobierzRuch(serwer);
 
-//            Ruch ruch = this.klienci.getById(aktualnyGraczId).pobierzRuch();
+            App.logger.log(String.format("Gracz %d wykonał ruch %s.", this.aktualnyGracz, ruch));
 
-            Ruch ruch = new Ruch(new Koordynaty(0, 0), new Koordynaty(0, 0));
-
-            while(!this.zweryfikujRuch(ruch)) {
-//                ruch = this.klienci.getById(aktualnyGraczId).pobierzRuch();
-            }
+            serwer.rozeslijRuch(this.aktualnyGracz, ruch);
 
             this.getAktualnyGracz().wykonajRuch(ruch);
 
-//            this.getAktualnyGracz().sprawdzWygrana();
+            if(this.getAktualnyGracz().sprawdzWygrana()) {
+                App.logger.log(String.format("Gracz %d wygrał. Koniec gry.", this.aktualnyGracz));
+
+                serwer.rozeslijWygrana(this.aktualnyGracz);
+                break;
+            }
 
             this.kolejnaTura();
         }
+    }
+
+    private Ruch pobierzRuch(Serwer serwer) {
+        Ruch ruch = serwer.pobierzRuchKlienta(this.aktualnyGracz);
+
+        while(!this.zweryfikujRuch(ruch)) {
+            ruch = serwer.pobierzRuchKlienta(this.aktualnyGracz);
+        }
+
+        return ruch;
     }
 
     public void kolejnaTura() {
