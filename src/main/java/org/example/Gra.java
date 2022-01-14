@@ -1,186 +1,154 @@
 package org.example;
 
-public class Gra {
-    public static final int SZEROKOSC_PLANSZY = 25;
-    public static final int WYSOKOSC_PLANSZY = 17;
-    public static final int LICZBA_PIONKOW = 10;
+import java.util.ArrayList;
+import java.util.List;
 
-    private boolean[][] pola;
-    private Gracz[] gracze;
+/**
+ * Główna logika związana z przeprowadzaniem rozgrywki.
+ */
+
+public class Gra {
+    private List<Gracz> gracze;
     private int liczbaGraczy;
-    private int aktualnyGracz;
+    private int aktualnyGraczIndex;
     private int runda;
 
+    /**
+     * Tworzy graczy oraz inicjalizuje aktualnego gracza i rundę.
+     *
+     * @param liczbaGraczy Liczba graczy biorących udział w rozgrywce.
+     */
+
     public Gra(int liczbaGraczy) {
-        stworzPola();
         stworzGraczy(liczbaGraczy);
 
-        this.aktualnyGracz = 0;
+        this.aktualnyGraczIndex = 0;
         this.runda = 0;
     }
 
+    /**
+     * Główna pętla rozgrywki. Najpierw pobiera gracza, którego jest
+     * aktualna tura. Następnie pobiera ruch poprzez serwer łączący się
+     * z odpowiednim klientem. Potem serwer rozsyła ruch do reszty klientów,
+     * i odpowiedni ruch jest wykonywany po stronie serwera. Potem sprawdzamy
+     * czy aktualny gracz doszedł do stanu wygrywającego. Jeżeli tak to logujemy
+     * o tym informację, a następnie odłączamy gracza od rozgrywki i dekrementujemy
+     * liczbę graczy. Jeżeli liczba pozostałych graczy jest mniejsza lub równa 1
+     * kończymy grę. Po zakończeniu tury rozpoczyna się kolejna.
+     *
+     * @param serwer Instancja serwera do komunikacji z klientami.
+     */
+
     public void glownaPetla(Serwer serwer) {
         while(true) {
-            Gracz aktualnyGracz = this.getAktualnyGracz();
+            Gracz aktualnyGracz = getAktualnyGracz();
 
-            Ruch ruch = this.pobierzRuch(serwer);
+            Ruch ruch = pobierzRuch(serwer, aktualnyGracz);
 
-            App.logger.log(String.format("Gracz %d wykonał ruch %s.", this.aktualnyGracz, ruch));
-
-            serwer.rozeslijRuch(this.aktualnyGracz, ruch);
+            serwer.rozeslijRuch(aktualnyGracz, ruch);
 
             aktualnyGracz.wykonajRuch(ruch);
 
             if(aktualnyGracz.sprawdzWygrana()) {
-                App.logger.log(String.format("Gracz %d wygrał.", this.aktualnyGracz));
+                App.logger.log(String.format("Gracz %d wygrał.", aktualnyGracz.getNumer()));
 
-                serwer.rozeslijWygrana(this.aktualnyGracz);
-                this.gracze[this.aktualnyGracz] = null;
+                serwer.rozeslijWygranaIRozlaczGracza(aktualnyGracz);
+                usunAktualnegoGracza();
+            }
 
+            if(liczbaGraczy <= 1) {
                 break;
             }
 
-            this.kolejnaTura();
+            kolejnaTura();
         }
     }
 
-    private Ruch pobierzRuch(Serwer serwer) {
-        Ruch ruch = serwer.pobierzRuchKlienta(this.aktualnyGracz);
+    /**
+     * Aktualny gracz jest usuwany z rozgrywki.
+     */
 
-        while(!this.zweryfikujRuch(ruch)) {
-            ruch = serwer.pobierzRuchKlienta(this.aktualnyGracz);
+    // can't remove because breaks pawns checking in Board BUG
+    private void usunAktualnegoGracza() {
+        gracze.remove(aktualnyGraczIndex);
+        liczbaGraczy--;
+    }
+
+    /**
+     * Pobiera ruch gracza w pętli do momentu aż nie będzie
+     * on prawidłowy. Następnie ruch jest zwracany.
+     *
+     * @param serwer Instancja serwera do komunikacji z klientami.
+     * @param gracz Gracz, którego ruch jest pobierany.
+     * @return Zweryfikowany ruch gracza.
+     */
+
+    private Ruch pobierzRuch(Serwer serwer, Gracz gracz) {
+        Ruch ruch = serwer.pobierzRuchKlienta(gracz);
+
+        while(!App.board.zweryfikujRuch(ruch, gracz, this.gracze)) {
+            ruch = serwer.pobierzRuchKlienta(gracz);
         }
+
+        App.logger.log(String.format("Gracz %d wykonał ruch %s.", this.aktualnyGraczIndex, ruch));
 
         return ruch;
     }
 
-    public void kolejnaTura() {
-        this.aktualnyGracz++;
+    /**
+     * Przypisuje turę do kolejnego gracza i jeżeli
+     * runda się zakończyła, inkrementuje zmienną z liczbą rundy.
+     */
 
-        if(this.aktualnyGracz == this.liczbaGraczy) {
-            this.aktualnyGracz = 0;
+    private void kolejnaTura() {
+        this.aktualnyGraczIndex++;
+
+        if(this.aktualnyGraczIndex == this.liczbaGraczy) {
+            this.aktualnyGraczIndex = 0;
             this.runda++;
         }
     }
 
-    public Gracz getAktualnyGracz() {
-        while(this.gracze[this.aktualnyGracz] == null) {
-            kolejnaTura();
-        }
+    /**
+     * Pobiera gracza, którego tura odbywa się aktualnie.
+     *
+     * @return Gracz, którego tura odbywa się aktualnie.
+     */
 
-        return this.gracze[this.aktualnyGracz];
+    private Gracz getAktualnyGracz() {
+        return this.gracze.get(this.aktualnyGraczIndex);
     }
 
-    public boolean zweryfikujRuch(Ruch ruch) {
-        Gracz gracz = this.getAktualnyGracz();
-
-        if(!this.pola[ruch.getDoPola().getX()][ruch.getDoPola().getY()]){
-            return false;
-        }
-
-        if(!gracz.czyPionekNaPolu(ruch.getzPola())) {
-            return false;
-        }
-
-        int sumDiff = ruch.sumDiff();
-
-        if(sumDiff == 2) {
-            return !this.czyPionekNaPolu(ruch.getDoPola());
-        }
-
-        if(sumDiff == 4) {
-            Koordynaty koordynatyPomiedzy = ruch.getKoordynatyPomiedzy();
-
-            return !this.czyPionekNaPolu(ruch.getDoPola()) && this.czyPionekNaPolu(koordynatyPomiedzy);
-        }
-
-        return false;
-    }
-
-    public boolean czyPionekNaPolu(Koordynaty koordynaty) {
-        for(int i=0; i<liczbaGraczy; i++) {
-            Gracz gracz = this.gracze[i];
-
-            for(int j=0; j<LICZBA_PIONKOW; j++) {
-                if(gracz.czyPionekNaPolu(koordynaty)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    private void stworzPola() {
-        boolean[][] pola = new boolean[SZEROKOSC_PLANSZY][WYSOKOSC_PLANSZY];
-
-        for (int x=0; x<SZEROKOSC_PLANSZY; x++) {
-            for (int y=0; y<WYSOKOSC_PLANSZY; y++) {
-                pola[x][y] = true;
-            }
-        }
-
-        this.pola = pola;
-
-        usunacCoDrugiePola();
-        usunacPolaPozaPlansza();
-    }
-
-    private void usunacCoDrugiePola() {
-        for (int x=0; x<SZEROKOSC_PLANSZY; x++) {
-            for (int y=0; y<WYSOKOSC_PLANSZY; y++) {
-                if ((x + y) % 2 == 1) {
-                    this.pola[x][y] = false;
-                }
-            }
-        }
-    }
-
-    private void usunacPolaPozaPlansza() {
-        for (int x=0; x<SZEROKOSC_PLANSZY; x++) {
-            for (int y=0; y<WYSOKOSC_PLANSZY; y++) {
-                if (!((y <= x + 4) && (y >= 4) && (y <= -1*x + 28)) &&
-                    !((y >= -1*x + 12) && (y <= 12) && (y >= x - 12))) {
-                    this.pola[x][y] = false;
-                }
-            }
-        }
-    }
+    /**
+     * Tworzy graczy i przypisuje im odpowiednie id i numery
+     * w zależności od tego ilu graczy bierze udział w rozgrywce.
+     *
+     * @param liczbaGraczy Liczba graczy biorących udział w rozgrywce.
+     */
 
     private void stworzGraczy(int liczbaGraczy){
         this.liczbaGraczy = liczbaGraczy;
 
-        int i = 0;
+        int idGracza = 0;
 
         if(liczbaGraczy == 2 || liczbaGraczy == 3 || liczbaGraczy == 4 || liczbaGraczy == 6){
-            gracze = new Gracz[liczbaGraczy];
-            int idGracza = 0;
-            while(i<liczbaGraczy){
-                gracze[i] = new Gracz(idGracza);
+            gracze = new ArrayList<>();
+            int numerGracza = 1;
+
+            while(idGracza<liczbaGraczy){
+                gracze.add(new GraczImpl(idGracza, numerGracza));
                 int k = 6/liczbaGraczy;
                 if(liczbaGraczy == 4){
-                    if(i == 1){
-                        idGracza = idGracza + 2;
+                    if(idGracza == 1){
+                        numerGracza = numerGracza + 2;
                     } else{
-                        idGracza = idGracza + 1;
+                        numerGracza = numerGracza + 1;
                     }
                 } else{
-                    idGracza = idGracza + k;
+                    numerGracza = numerGracza + k;
                 }
-                i++;
+                idGracza++;
             }
         }
     }
-
-    public boolean[][] getPola() {
-        return pola;
-    }
-
-    public Gracz[] getGracze(){
-        return gracze;
-    }
-
-    public int getRunda(){ return runda; }
-
-    public int getAktGracz(){ return aktualnyGracz; }
 }
