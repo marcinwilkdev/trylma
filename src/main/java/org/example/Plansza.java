@@ -9,9 +9,9 @@ public class Plansza extends JPanel implements MouseListener{
     int WYSOKOSC_PLANSZY = 17;
     boolean[][] pola;
     Pole[] tablicaPol = new Pole[121];
-    Pionek2[] tablicaPion = new Pionek2[60];
+    PionekNaPlanszy[] tablicaPion = new PionekNaPlanszy[60];
     int clicker = 0;
-    Pionek2 holderPionka;
+    PionekNaPlanszy holderPionka;
     Pole holderPola;
     int liczbaPionkow = 0;
     int liczbaGraczy;
@@ -41,7 +41,7 @@ public class Plansza extends JPanel implements MouseListener{
             for (int x = 0; x < SZEROKOSC_PLANSZY; x++) {
                 for (int y = 0; y < WYSOKOSC_PLANSZY; y++) {
                     if (pola[x][y] && y < 4) {
-                        tablicaPion[liczbaPionkow] = new Pionek2(x, y, 0);
+                        tablicaPion[liczbaPionkow] = new PionekNaPlanszy(x, y, 0);
                         this.add(tablicaPion[liczbaPionkow]);
                         liczbaPionkow++;
                     }
@@ -63,7 +63,7 @@ public class Plansza extends JPanel implements MouseListener{
             for (int x = 0; x < SZEROKOSC_PLANSZY; x++) {
                 for (int y = 0; y < WYSOKOSC_PLANSZY; y++) {
                     if (pola[x][y] && y < x - 12) {
-                        tablicaPion[liczbaPionkow] = new Pionek2(x, y, 1);
+                        tablicaPion[liczbaPionkow] = new PionekNaPlanszy(x, y, 1);
                         this.add(tablicaPion[liczbaPionkow]);
                         liczbaPionkow++;
                     }
@@ -82,7 +82,7 @@ public class Plansza extends JPanel implements MouseListener{
             for (int x = 0; x < SZEROKOSC_PLANSZY; x++) {
                 for (int y = 0; y < WYSOKOSC_PLANSZY; y++) {
                     if (pola[x][y] && y > 28 - x) {
-                        tablicaPion[liczbaPionkow] = new Pionek2(x, y, 2);
+                        tablicaPion[liczbaPionkow] = new PionekNaPlanszy(x, y, 2);
                         this.add(tablicaPion[liczbaPionkow]);
                         liczbaPionkow++;
                     }
@@ -101,7 +101,7 @@ public class Plansza extends JPanel implements MouseListener{
             for (int x = 0; x < SZEROKOSC_PLANSZY; x++) {
                 for (int y = 0; y < WYSOKOSC_PLANSZY; y++) {
                     if (pola[x][y] && y > 12) {
-                        tablicaPion[liczbaPionkow] = new Pionek2(x, y, 3);
+                        tablicaPion[liczbaPionkow] = new PionekNaPlanszy(x, y, 3);
                         this.add(tablicaPion[liczbaPionkow]);
                         liczbaPionkow++;
                     }
@@ -120,7 +120,7 @@ public class Plansza extends JPanel implements MouseListener{
             for (int x = 0; x < SZEROKOSC_PLANSZY; x++) {
                 for (int y = 0; y < WYSOKOSC_PLANSZY; y++) {
                     if (pola[x][y] && y > x+4) {
-                        tablicaPion[liczbaPionkow] = new Pionek2(x, y, 4);
+                        tablicaPion[liczbaPionkow] = new PionekNaPlanszy(x, y, 4);
                         this.add(tablicaPion[liczbaPionkow]);
                         liczbaPionkow++;
                     }
@@ -137,7 +137,7 @@ public class Plansza extends JPanel implements MouseListener{
             for (int x = 0; x < SZEROKOSC_PLANSZY; x++) {
                 for (int y = 0; y < WYSOKOSC_PLANSZY; y++) {
                     if (pola[x][y] && y <  12 - x) {
-                        tablicaPion[liczbaPionkow] = new Pionek2(x, y, 5);
+                        tablicaPion[liczbaPionkow] = new PionekNaPlanszy(x, y, 5);
                         this.add(tablicaPion[liczbaPionkow]);
                         liczbaPionkow++;
                     }
@@ -202,7 +202,7 @@ public class Plansza extends JPanel implements MouseListener{
         return null;
     }
 
-    public Pionek2 PionekNaPolu(int x, int y){
+    public PionekNaPlanszy PionekNaPolu(int x, int y){
         int i = 0;
         while(i<60  && tablicaPion[i]!=null){
             if(tablicaPion[i].getx() == x && tablicaPion[i].gety() == y) {

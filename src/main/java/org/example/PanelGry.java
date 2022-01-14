@@ -22,4 +22,8 @@ public class PanelGry extends JPanel{
     public void wygrana() {
         this.panelTekstu.setText("WYGRALES");
     }
+
+    public void rundaGracza() {this.panelTekstu.setText("TWOJA RUNDA");}
+
+    public void clear() {this.panelTekstu.setText(" ");};
 }

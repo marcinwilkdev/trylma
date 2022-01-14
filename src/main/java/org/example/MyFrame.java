@@ -17,9 +17,7 @@ public class MyFrame extends JFrame{
     Plansza plansza;
     PanelGry panelGry;
 
-    MyFrame(int id, int liczbaGraczy) {
-        this.id = id;
-        this.liczbaGraczy = liczbaGraczy;
+    public void uzupelnij(){
         ustawRamke();
         stworzKomponenty();
     }
@@ -27,6 +25,10 @@ public class MyFrame extends JFrame{
     public void przestawPionkaNaPlanszy(int x1, int y1, int x2, int y2) {
         plansza.przestawPionkaNaPlanszy(x1, y1, x2, y2);
     }
+
+    public void rundaGracza(){ panelGry.rundaGracza(); }
+
+    public void clear(){ panelGry.clear(); }
 
     public void wygrana() {
         panelGry.wygrana();
@@ -87,6 +89,51 @@ public class MyFrame extends JFrame{
             this.add(numer4);
             this.add(numer5);
             this.add(numer6);
+        }
+    }
+
+    public static class MyFrameBuilder{
+        int liczbaGraczy;
+        int id;
+        Plansza plansza;
+        PanelGry panelGry;
+
+        public MyFrameBuilder(){
+            System.out.println("Wchodzę z lg = " + liczbaGraczy + " i id = " + id);
+            this.liczbaGraczy = liczbaGraczy;
+            this.id = id;
+        }
+
+        public MyFrameBuilder budujId(int id){
+            this.id = id;
+            System.out.println("Wchodzę z lg = " + liczbaGraczy + " i id = " + id);
+            return this;
+        }
+
+        public MyFrameBuilder budujLiczbeGraczy(int liczbaGraczy){
+            this.liczbaGraczy = liczbaGraczy;
+            System.out.println("Wchodzę z lg = " + liczbaGraczy + " i id = " + id);
+            return this;
+        }
+
+        public MyFrameBuilder budujPlansze(Plansza plansza){
+            this.plansza = plansza;
+            return this;
+        }
+
+        public MyFrameBuilder budujPanelGry(PanelGry panelGry){
+            this.panelGry = panelGry;
+            return this;
+        }
+
+        public MyFrame build(){
+            MyFrame myFrame = new MyFrame();
+            myFrame.id = this.id;
+            myFrame.liczbaGraczy = this.liczbaGraczy;
+            myFrame.panelGry = this.panelGry;
+            myFrame.plansza = this.plansza;
+            myFrame.uzupelnij();
+            return myFrame;
         }
     }
 

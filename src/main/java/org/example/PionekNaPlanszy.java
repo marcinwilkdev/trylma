@@ -1,22 +1,14 @@
 package org.example;
-import java.awt.event.MouseWheelEvent;
-import java.awt.BorderLayout;
-import java.awt.Font;
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.*;
-import java.io.*;
-import java.io.Serializable;
-import java.awt.Desktop;
 import javax.swing.*;
 
-public class Pionek2 extends JPanel{
+public class PionekNaPlanszy extends JPanel{
 
     int x;
     int y;
     int id;
 
-    public Pionek2(int k, int l, int id) {
+    public PionekNaPlanszy(int k, int l, int id) {
         this.id = id;
         this.x = k;
         this.y = l;

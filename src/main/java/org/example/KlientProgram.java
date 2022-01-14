@@ -32,7 +32,12 @@ public class KlientProgram {
 
                 if(messageTokens[0].equals("ID")){
                     idGracza = Integer.parseInt(messageTokens[1]);
-                    myFrame = new MyFrame(idGracza,Integer.parseInt(messageTokens[2]));
+                    myFrame = new MyFrame.MyFrameBuilder()
+                            .budujId(Integer.parseInt(messageTokens[1]))
+                            .budujLiczbeGraczy(Integer.parseInt(messageTokens[2]))
+                            .budujPanelGry(new PanelGry(Integer.parseInt(messageTokens[1])))
+                            .budujPlansze(new Plansza(Integer.parseInt(messageTokens[2])))
+                            .build();
                     graRozpoczeta = true;
                 }
 
@@ -45,10 +50,18 @@ public class KlientProgram {
                     if(myFrame != null) {
                         myFrame.przestawPionkaNaPlanszy(x1, y1, x2, y2);
                     }
+
+                    myFrame.clear();
                 }
 
                 if(messageTokens[0].equals("RUCH") || messageTokens[0].equals("ID") || messageTokens[0].equals("SKIP")) {
                     continue;
+                }
+
+                if(messageTokens[0].equals("TURA")) {
+                        if(myFrame != null) {
+                            myFrame.rundaGracza();
+                        }
                 }
 
                 if(messageTokens[0].equals("WYGRANA")) {
