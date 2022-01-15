@@ -56,7 +56,12 @@ public class KlientProgram {
                     myFrame.clear();
                 }
 
-                if(messageTokens[0].equals("RUCH") || messageTokens[0].equals("ID") || messageTokens[0].equals("SKIP")) {
+                if(messageTokens[0].equals("SKIP")){
+                    myFrame.clear();
+                    continue;
+                }
+
+                if(messageTokens[0].equals("RUCH") || messageTokens[0].equals("ID")) {
                     continue;
                 }
 
