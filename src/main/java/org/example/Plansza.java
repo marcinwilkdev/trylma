@@ -3,6 +3,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+/**
+ *  Plansza, na której graficznie przedstawiana jest rozgrywka prowadzona przez graczy
+ */
+
 public class Plansza extends JPanel implements MouseListener{
 
     int SZEROKOSC_PLANSZY = 25;
@@ -16,6 +20,14 @@ public class Plansza extends JPanel implements MouseListener{
     int liczbaPionkow = 0;
     int liczbaGraczy;
 
+    /**
+     * Wartość liczbaGraczy przypisywana jest do odpowiedniego pola w klasie Plansza. Po wywołaniu
+     * konstruktora wywoływane są metody, które ustawiają parametry graficzne, dodają komponenty i ustawiają je na
+     * planszy.
+     *
+     * @param liczbaGraczy - liczba graczy biorących udział w rozgrywce
+     */
+
     Plansza(int liczbaGraczy){
         this.liczbaGraczy = liczbaGraczy;
         ustawPlansze();
@@ -24,12 +36,22 @@ public class Plansza extends JPanel implements MouseListener{
         narysujPola();
     }
 
+    /**
+     * Ustawiane są parametry graficzne planszy, takie jak layout, wymiary, kolor tła. Dodatkowo dodawany jest
+     * mouseListener odpowiedzialny za obsługę kliknięć.
+     */
+
     public void ustawPlansze(){
         this.setLayout(null);
         this.setBounds(0,0,900,900);
         this.setBackground(Color.decode("#98999e"));
         this.addMouseListener(this);
     }
+
+    /**
+     * Metoda dodająca i ustawiająca pionki na planszy. W zależności od ilości graczy na kolejne pola dodawane są
+     * pionki.
+     */
 
     private void dodajPionki(int liczbaGraczy){
 
@@ -146,6 +168,12 @@ public class Plansza extends JPanel implements MouseListener{
         }
     }
 
+    /**
+     * Metoda przypisująca wartości true do wszystkich możliwych pól x i y ograniczonych wysokością i szerokością planszy.
+     * Następnie wywoływane są metody, które ograniczają wszystkie pola o wartościach true tylko do tych pól, na których
+     * prowadzona jest rozgrywka.
+     */
+
     private void stworzPola() {
         pola = new boolean[SZEROKOSC_PLANSZY][WYSOKOSC_PLANSZY];
         for (int x=0; x<SZEROKOSC_PLANSZY; x++) {
@@ -157,6 +185,11 @@ public class Plansza extends JPanel implements MouseListener{
         usunacPolaPozaPlansza();
     }
 
+    /**
+     * Metoda ustawiająca na false pola, których suma współrzędnych jest nieparzysta. W rozgrywce uwzględniamy
+     * tylko te pola, które mają parzystą sumę koordynatów.
+     */
+
     private void usunacCoDrugiePola() {
         for (int x=0; x<SZEROKOSC_PLANSZY; x++) {
             for (int y=0; y<WYSOKOSC_PLANSZY; y++) {
@@ -166,6 +199,10 @@ public class Plansza extends JPanel implements MouseListener{
             }
         }
     }
+
+    /**
+     * Metoda usuwająca pola będące w narożnikach planszy, które nie są wykorzystywane
+     */
 
     private void usunacPolaPozaPlansza() {
         for (int x=0; x<SZEROKOSC_PLANSZY; x++) {
@@ -177,6 +214,10 @@ public class Plansza extends JPanel implements MouseListener{
             }
         }
     }
+
+    /**
+     * Metoda tworząca pola oraz zapisująca je do tablicy pól, z których korzysta GUI.
+     */
 
     private void narysujPola(){
         int i = 0;
@@ -191,6 +232,15 @@ public class Plansza extends JPanel implements MouseListener{
         }
     }
 
+    /**
+     * Metoda zwracająca pole o odpowiednich koordynatach.
+     *
+     * @param x - wartość koordynatu x pola, które chcemy dostać
+     * @param y - wartość koordynaty y pola, które chcemy dostać
+     *
+     * @return - pole o podanych koordynatach lub null, gdy takie pole nie istnieje
+     */
+
     public Pole getPole(int x, int y){
         int i = 0;
         while(i<121){
@@ -202,6 +252,15 @@ public class Plansza extends JPanel implements MouseListener{
         return null;
     }
 
+    /**
+     * Metoda zwracająca pionka o odpowiednich koordynatach
+     *
+     * @param x - wartość koordynatu x pionka, które chcemy dostać
+     * @param y - wartość koordynaty y pionka, które chcemy dostać
+     *
+     * @return - pionek o podanych koordynatach lub null, gdy taki pionek nie istnieje
+     */
+
     public PionekNaPlanszy PionekNaPolu(int x, int y){
         int i = 0;
         while(i<60  && tablicaPion[i]!=null){
@@ -212,6 +271,14 @@ public class Plansza extends JPanel implements MouseListener{
         }
         return null;
     }
+
+    /**
+     * Metoda wywoływana przy kliknięciu myszką na planszę. Jest ona używana podczas wykonywania ruchu przez gracza.
+     * Ruch wykonywany jest w taki sposób - gracz klika na odpowiednie pole. Jeśli na tym polu znajduje się pionek, to
+     * jest on przekazywany do pola holderPionka, a wartość zmiennej clicker powiększana jest o 1. Gdy kliknęliśmy we właściwe
+     * pole i pionek został pobrany, to przy następnym kliknięciu wybieramy pole, na które chcemy przestawić pobrany pionek. Jeśli
+     * to pole istnieje oraz informacja od serwera zawiera informację o wykonanym ruchu, to ruch jest uwzględniany na planszy.
+     */
 
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -232,6 +299,15 @@ public class Plansza extends JPanel implements MouseListener{
         }
     }
 
+    /**
+     * Metoda przestawiająca pionek na odpowiednie miejsce na planszy.
+     *
+     * @param x1 - koordynat x pola, na którym stoi pionek
+     * @param y1 - koordynat y pola, na którym stoi pionek
+     * @param x2 - koordynat x pola, na które przestawiamy pionek
+     * @param y2 - koordynat y pola, na które przestawiamy pionek
+     */
+
     public void przestawPionkaNaPlanszy(int x1, int y1, int x2, int y2) {
         holderPionka = PionekNaPolu(x1, y1);
         holderPionka.x = x2;
@@ -239,20 +315,36 @@ public class Plansza extends JPanel implements MouseListener{
         holderPionka.aktualizujWspolrzedne();
     }
 
+    /**
+     * Metoda wymagana przez MouseListenera - jej wywołanie nie powoduje żadnych konsekwencji
+     */
+
     @Override
     public void mousePressed(MouseEvent e) {
 
     }
+
+    /**
+     * Metoda wymagana przez MouseListenera - jej wywołanie nie powoduje żadnych konsekwencji
+     */
 
     @Override
     public void mouseReleased(MouseEvent e) {
 
     }
 
+    /**
+     * Metoda wymagana przez MouseListenera - jej wywołanie nie powoduje żadnych konsekwencji
+     */
+
     @Override
     public void mouseEntered(MouseEvent e) {
 
     }
+
+    /**
+     * Metoda wymagana przez MouseListenera - jej wywołanie nie powoduje żadnych konsekwencji
+     */
 
     @Override
     public void mouseExited(MouseEvent e) {

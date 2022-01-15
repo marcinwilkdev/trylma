@@ -12,6 +12,10 @@ public class App
      * Pole przechowujące instancję loggera służącego do logowania informacji w całym programie.
      */
 
+
+
+
+
     public static final Logger logger = StdoutLogger.getInstance();
 
     /**

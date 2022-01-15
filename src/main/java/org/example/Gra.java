@@ -133,7 +133,7 @@ public class Gra {
 
         if(liczbaGraczy == 2 || liczbaGraczy == 3 || liczbaGraczy == 4 || liczbaGraczy == 6){
             gracze = new ArrayList<>();
-            int numerGracza = 1;
+            int numerGracza = 0;
 
             while(idGracza<liczbaGraczy){
                 gracze.add(new GraczImpl(idGracza, numerGracza));

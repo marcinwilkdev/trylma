@@ -2,11 +2,23 @@ package org.example;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Pole wykorzystywane jako komponent GUI
+ */
+
 public class Pole extends JPanel{
 
     int x;
     int y;
     Color color;
+
+    /**
+     * Wartości x i y są przekazywane do odpowiednich pól klasy Pole. Ustawiane są parametry graficzne komponentu, takie jak
+     * kolor tła czy wymiary.
+     *
+     * @param x - wartość koordynatu x przypisanego do pola
+     * @param y - wartośc koordynatu y przypisanego do pola
+     */
 
     Pole(int x, int y){
         this.x = x;
@@ -23,6 +35,10 @@ public class Pole extends JPanel{
 
     }
 
+    /**
+     * Metoda ustawiająca kolor pola, a następnie rysująca pole o kolistym kształcie.
+     */
+
     public void paintComponent(Graphics g) {
 
         super.paintComponent(g);
@@ -31,9 +47,21 @@ public class Pole extends JPanel{
 
     }
 
+    /**
+     * Metoda zwracająca aktualną wartość pola x
+     *
+     * @return - aktualna wartość pola x
+     */
+
     public int getx(){
         return x;
     }
+
+    /**
+     * Metoda zwracająca aktualną wartość pola y
+     *
+     * @return - aktualna wartość pola y
+     */
 
     public int gety(){
         return y;

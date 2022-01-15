@@ -37,6 +37,7 @@ public class KlientProgram {
                             .budujLiczbeGraczy(Integer.parseInt(messageTokens[2]))
                             .budujPanelGry(new PanelGry(Integer.parseInt(messageTokens[1])))
                             .budujPlansze(new Plansza(Integer.parseInt(messageTokens[2])))
+                            .budujPanelNumeru(new PanelNumeru(Integer.parseInt(messageTokens[1])))
                             .build();
                     graRozpoczeta = true;
                 }
