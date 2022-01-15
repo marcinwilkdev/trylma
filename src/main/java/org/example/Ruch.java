@@ -36,6 +36,10 @@ public class Ruch {
         return new Koordynaty(x, y);
     }
 
+    public boolean isSkip() {
+        return skip;
+    }
+
     public Koordynaty getzPola() {
         return zPola;
     }
@@ -46,6 +50,10 @@ public class Ruch {
 
     @Override
     public String toString() {
+        if(skip) {
+            return "(skip)";
+        }
+
         Koordynaty zPola = this.getzPola();
         Koordynaty doPola = this.getDoPola();
 

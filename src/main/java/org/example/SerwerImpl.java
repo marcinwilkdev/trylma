@@ -306,6 +306,10 @@ public class SerwerImpl implements Serwer {
      */
 
     private String ruchIntoMessage(int nrGracza, Ruch ruch) {
+        if(ruch.isSkip()) {
+            return "SKIP";
+        }
+
         int x1 = ruch.getzPola().getX();
         int y1 = ruch.getzPola().getY();
         int x2 = ruch.getDoPola().getX();

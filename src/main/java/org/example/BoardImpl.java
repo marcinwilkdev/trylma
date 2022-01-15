@@ -64,6 +64,10 @@ public class BoardImpl implements Board {
      */
 
     public boolean zweryfikujRuch(Ruch ruch, Gracz gracz, List<Gracz> gracze) {
+        if(ruch.isSkip()) {
+            return true;
+        }
+
         if(niePionekGracza(gracz, ruch.getzPola())) {
             return false;
         }

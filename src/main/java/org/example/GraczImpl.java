@@ -85,6 +85,10 @@ public class GraczImpl implements Gracz {
      */
 
     public void wykonajRuch(Ruch ruch) {
+        if(ruch.isSkip()) {
+            return;
+        }
+
         Pionek pionek = this.wybierzPionek(ruch.getzPola());
 
         // pionek nie moze byc nullem bo weryfikacja wczesniej w Gra
