@@ -19,6 +19,7 @@ public class Plansza extends JPanel implements MouseListener{
     Pole holderPola;
     int liczbaPionkow = 0;
     int liczbaGraczy;
+    JButton skipButton;
 
     /**
      * Wartość liczbaGraczy przypisywana jest do odpowiedniego pola w klasie Plansza. Po wywołaniu
@@ -293,7 +294,9 @@ public class Plansza extends JPanel implements MouseListener{
             Pole pole = getPole((e.getX()-135)/25, (e.getY()-90)/37);
             if(pole != null && (pole.getx() != holderPionka.getx() || pole.gety() != holderPionka.gety())){
                 holderPola = getPole((e.getX()-135)/25, (e.getY()-90)/37);
-                KlientProgram.globalWriter.println(String.format("RUCH %d %d %d %d", holderPionka.getx(), holderPionka.gety(), holderPola.getx(), holderPola.gety()));
+                if(KlientProgram.globalWriter != null) {
+                    KlientProgram.globalWriter.println(String.format("RUCH %d %d %d %d", holderPionka.getx(), holderPionka.gety(), holderPola.getx(), holderPola.gety()));
+                }
                 clicker = 0;
             }
         }

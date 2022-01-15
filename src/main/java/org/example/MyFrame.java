@@ -9,18 +9,20 @@ import java.awt.event.*;
 import java.io.*;
 import java.io.Serializable;
 import java.awt.Desktop;
+import javax.swing.*;
 
 /**
  * GUI, z którego uczestnik gry korzysta podczas rozgrywki.
  */
 
-public class MyFrame extends JFrame{
+public class MyFrame extends JFrame implements ActionListener{
 
     int liczbaGraczy;
     int id;
     Plansza plansza;
     PanelGry panelGry;
     PanelNumeru panelNumeru;
+    ButtonHolder buttonHolder;
 
     /**
      * Ustawia parametry GUI po jej stworzeniu oraz dodaje do niej stworzone
@@ -88,12 +90,11 @@ public class MyFrame extends JFrame{
 
     public void dodajKomponenty(){
 
-
         this.add(panelGry);
         this.add(panelNumeru);
+        this.add(buttonHolder);
         dodajNumeryGraczy(liczbaGraczy);
         this.add(plansza);
-
 
     }
 
@@ -145,6 +146,11 @@ public class MyFrame extends JFrame{
         }
     }
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+    }
+
     /**
      * Klasa budująca MyFrame - służy do stworzenia GUI ze stworzonych w niej elementów
      */
@@ -155,6 +161,7 @@ public class MyFrame extends JFrame{
         Plansza plansza;
         PanelGry panelGry;
         PanelNumeru panelNumeru;
+        ButtonHolder buttonHolder;
 
         /**
          * Metoda przypisująca instancji klasy MyFrameBuilder odpowiednie ID gracza
@@ -216,6 +223,11 @@ public class MyFrame extends JFrame{
             return this;
         }
 
+        public MyFrameBuilder budujButtonHolderBuilder(ButtonHolder buttonHolder){
+            this.buttonHolder = buttonHolder;
+            return this;
+        }
+
         /**
          * Metoda "budująca" odpowiednie GUI z elementów, które są wcześniej przekazywane do tej klasy odpowiednimi metodami.
          *
@@ -229,6 +241,7 @@ public class MyFrame extends JFrame{
             myFrame.panelGry = this.panelGry;
             myFrame.plansza = this.plansza;
             myFrame.panelNumeru = this.panelNumeru;
+            myFrame.buttonHolder = this.buttonHolder;
             myFrame.uzupelnij();
             return myFrame;
         }
